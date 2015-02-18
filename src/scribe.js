@@ -206,15 +206,15 @@ define([
   };
 
   Scribe.prototype.restoreFromHistory = function (historyItem) {
-    this.setHTML(historyItem, true);
+    // this.setHTML(historyItem, true);
 
     // Restore the selection
-    var selection = new this.api.Selection();
-    selection.selectMarkers();
+    // var selection = new this.api.Selection();
+    // selection.selectMarkers();
 
     // Because we skip the formatters, a transaction is not run, so we have to
     // emit this event ourselves.
-    this.trigger('content-changed');
+    // this.trigger('content-changed');
   };
 
   // This will most likely be moved to another object eventually
