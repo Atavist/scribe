@@ -1,5 +1,12 @@
 #!/bin/bash
 
+npm install
+bower install
+orig=`pwd`
+cd bower_components/scribe-plugin-sanitizer
+npm install
+cd $orig
+
 # PREPARES SCRIBE + SELECTED SUBSET OF PLUGINS FOR UMD
 
 echo "" > build.js
