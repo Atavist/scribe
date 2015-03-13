@@ -1,4 +1,21 @@
-# 1.3.8
+# 1.3.0
+
+Introduces a new time-based undo manager and improvements to allow multiple Scribe instances to share or have a separate undo manager. Thanks to [Abdulrahman Alsaleh](https://github.com/aaalsaleh) for providing the code and spending a lot of time working with us on the tests.
+
+# 1.2.11
+
+Added configuration for removing `scribe.undoManager`
+
+# 1.2.10
+
+Bugfixes for selections that are 'reversed' (i.e. selected from right to left) from [Deains](https://github.com/deains). Thanks
+
+# 1.2.9
+
+Clarifies the use of nodeName in the Command implementation. Thanks [Christopher Liu](https://github.com/christopherliu)
+
+# 1.2.8
+
 Event waterfall / [Event Namespacing](https://github.com/guardian/scribe/pull/337)
 
 # 1.2.7

@@ -7,25 +7,24 @@ define(function () {
       var redoCommand = new scribe.api.Command('redo');
 
       redoCommand.execute = function () {
-        var historyItem = scribe.undoManager.redo();
-
-        if (typeof historyItem !== 'undefined') {
-          scribe.restoreFromHistory(historyItem);
-        }
+        scribe.undoManager.redo();
       };
 
       redoCommand.queryEnabled = function () {
-        return scribe.undoManager.position < scribe.undoManager.stack.length - 1;
+        return scribe.undoManager.position > 0;
       };
 
       scribe.commands.redo = redoCommand;
 
-      scribe.el.addEventListener('keydown', function (event) {
-        if (event.shiftKey && (event.metaKey || event.ctrlKey) && event.keyCode === 90) {
-          event.preventDefault();
-          redoCommand.execute();
-        }
-      });
+      //is scribe is configured to undo assign listener
+      if (scribe.options.undo.enabled) {
+        scribe.el.addEventListener('keydown', function (event) {
+          if (event.shiftKey && (event.metaKey || event.ctrlKey) && event.keyCode === 90) {
+            event.preventDefault();
+            redoCommand.execute();
+          }
+        });
+      }
     };
   };
 
