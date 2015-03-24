@@ -7,6 +7,11 @@ cd bower_components/scribe-plugin-sanitizer
 npm install
 cd $orig
 
+# patch sanitizer
+
+patch -N bower_components/scribe-plugin-sanitizer/src/scribe-plugin-sanitizer.js < sanitized.diff
+
+
 # PREPARES SCRIBE + SELECTED SUBSET OF PLUGINS FOR UMD
 
 echo "" > build.js
@@ -18,3 +23,8 @@ browserify --global-transform deamdify --standalone scribePluginUnlink "bower_co
 browserify --global-transform deamdify --standalone scribePluginFormatterPlainTextConvertNewLinesToHtml "bower_components/scribe-plugin-formatter-plain-text-convert-new-lines-to-html" >> build.js
 browserify --global-transform deamdify --standalone scribePluginSanitizer "bower_components/scribe-plugin-sanitizer" >> build.js
 browserify --global-transform deamdify --standalone scribePluginHeadingCommand "bower_components/scribe-plugin-heading-command" >> build.js
+
+
+# minify
+
+uglifyjs build.js > build.min.js
