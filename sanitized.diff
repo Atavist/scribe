@@ -1,0 +1,11 @@
+--- bower_components/scribe-plugin-sanitizer/src/scribe-plugin-sanitizer.js	2015-03-06 14:42:10.000000000 -0500
++++ bower_components/scribe-plugin-sanitizer/src/scribe-plugin-sanitizer.js	2015-03-24 15:57:42.000000000 -0400
+@@ -28,7 +28,7 @@
+     });
+ 
+     return function (scribe) {
+-      var janitor = new HTMLJanitor(configAllowMarkers);
++      var janitor = new HTMLJanitor.amdWeb(configAllowMarkers);
+ 
+       scribe.registerHTMLFormatter('sanitize', janitor.clean.bind(janitor));
+     };
