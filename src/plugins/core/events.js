@@ -1,15 +1,17 @@
 define([
-  'lodash-amd/modern/collections/contains',
-  '../../dom-observer'
+  '../../dom-observer',
+  'immutable'
 ], function (
-  contains,
-  observeDomChanges
+  observeDomChanges,
+  Immutable
 ) {
 
   'use strict';
 
   return function () {
     return function (scribe) {
+      var nodeHelpers = scribe.node;
+
       /**
        * Firefox: Giving focus to a `contenteditable` will place the caret
        * outside of any block elements. Chrome behaves correctly by placing the
@@ -28,7 +30,7 @@ define([
                   selection.range.startContainer === scribe.el;
 
           if (isFirefoxBug) {
-            var focusElement = getFirstDeepestChild(scribe.el.firstChild);
+            var focusElement = nodeHelpers.firstDeepestChild(scribe.el);
 
             var range = selection.range;
 
@@ -37,22 +39,6 @@ define([
 
             selection.selection.removeAllRanges();
             selection.selection.addRange(range);
-          }
-        }
-
-        function getFirstDeepestChild(node) {
-          var treeWalker = document.createTreeWalker(node, NodeFilter.SHOW_ALL, null, false);
-          var previousNode = treeWalker.currentNode;
-          if (treeWalker.firstChild()) {
-            // TODO: build list of non-empty elements (used elsewhere)
-            // Do not include non-empty elements
-            if (treeWalker.currentNode.nodeName === 'BR') {
-              return previousNode;
-            } else {
-              return getFirstDeepestChild(treeWalker.currentNode);
-            }
-          } else {
-            return treeWalker.currentNode;
           }
         }
       }.bind(scribe));
@@ -200,8 +186,7 @@ define([
         if (event.clipboardData) {
           event.preventDefault();
 
-          if (contains(event.clipboardData.types, 'text/html')) {
-
+          if (Immutable.List(event.clipboardData.types).includes('text/html')) {
             scribe.insertHTML(event.clipboardData.getData('text/html'));
           } else {
             scribe.insertPlainText(event.clipboardData.getData('text/plain'));

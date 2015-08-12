@@ -1,10 +1,10 @@
 {
   "name": "scribe-editor",
-  "version": "1.3.0",
+  "version": "1.4.15",
   "main": "src/scribe.js",
   "dependencies": {
-    "lodash-amd": "~2.4.1",
-    "immutable": "~3.6.2"
+    "lodash-amd": "~3.5.0",
+    "immutable": "~3.7.3"
   },
   "devDependencies": {
     "chai": "~1.9.1",
@@ -15,21 +15,23 @@
     "mversion": "~0.4.3",
     "node-amd-require": "^0.2.2",
     "npm": "^2.5.0",
-    "plumber": "~0.3.0",
-    "plumber-all": "~0.3.0",
-    "plumber-cli": "~0.3.0",
-    "plumber-glob": "~0.3.0",
-    "plumber-requirejs": "~0.3.0",
-    "plumber-uglifyjs": "~0.3.0",
-    "plumber-write": "~0.3.0",
-    "q": "~1.0.0",
+    "plumber": "~0.4.0",
+    "plumber-all": "~0.4.0",
+    "plumber-cli": "~0.4.0",
+    "plumber-glob": "~0.4.0",
+    "plumber-requirejs": "~0.4.0",
+    "plumber-uglifyjs": "~0.4.0",
+    "plumber-write": "~0.4.0",
+    "q": "~1.2",
     "request": "~2.33.0",
-    "scribe-test-harness": "~0.0.17",
+    "scribe-test-harness": "~0.0.21",
     "selenium-webdriver": "~2.41.0",
     "sinon": "^1.12.2"
   },
   "scripts": {
-    "test": "./run-tests.sh"
+    "setup-tests": "node_modules/scribe-test-harness/bin/setup-tests.sh",
+    "test": "./run-tests.sh",
+    "test-firefox": "BROWSER_NAME=firefox ./run-tests.sh"
   },
   "repository": {
     "type": "git",

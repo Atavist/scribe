@@ -11,21 +11,19 @@
 
 var Mocha = require('mocha');
 var createRunner = require('scribe-test-harness/create-runner');
+var testEnvironment = require('scribe-test-harness/environment');
 
 var mocha = new Mocha();
+
+var specs = process.argv[2] || (__dirname + '/**/*.spec.js');
 
 /**
  * Wait for the connection to Sauce Labs to finish.
  */
 mocha.timeout(15 * 1000);
 mocha.reporter('spec');
-mocha.addFile(__dirname + '/block-mode.spec.js');
-mocha.addFile(__dirname + '/commands.spec.js');
-mocha.addFile(__dirname + '/formatters.spec.js');
-mocha.addFile(__dirname + '/inline-elements-mode.spec.js');
-mocha.addFile(__dirname + '/patches.spec.js');
-mocha.addFile(__dirname + '/undo-manager.spec.js');
-mocha.addFile(__dirname + '/selection.spec.js');
-mocha.addFile(__dirname + '/unit/event-emitter.spec.js');
 
-createRunner(mocha);
+testEnvironment.loadSpecifications(specs, mocha)
+  .then(function(mocha) {
+    createRunner(mocha);
+  });

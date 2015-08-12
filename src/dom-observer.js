@@ -1,32 +1,24 @@
 define([
-  'lodash-amd/modern/arrays/flatten',
-  'lodash-amd/modern/collections/toArray',
-  './element',
   './node'
-], function (
-  flatten,
-  toArray,
-  elementHelpers,
-  nodeHelpers
-) {
+], function (nodeHelpers) {
+
+  var MutationObserver = window.MutationObserver ||
+    window.WebKitMutationObserver ||
+    window.MozMutationObserver;
+
+  function hasRealMutation(n) {
+    return ! nodeHelpers.isEmptyTextNode(n) &&
+      ! nodeHelpers.isSelectionMarkerNode(n);
+  }
+
+  function includeRealMutations(mutations) {
+    return mutations.some(function(mutation) {
+      return Array.prototype.some.call(mutation.addedNodes, hasRealMutation) ||
+        Array.prototype.some.call(mutation.removedNodes, hasRealMutation);
+    });
+  }
 
   function observeDomChanges(el, callback) {
-    function includeRealMutations(mutations) {
-      var allChangedNodes = flatten(mutations.map(function(mutation) {
-        var added   = toArray(mutation.addedNodes);
-        var removed = toArray(mutation.removedNodes);
-        return added.concat(removed);
-      }));
-
-      var realChangedNodes = allChangedNodes.
-        filter(function(n) { return ! nodeHelpers.isEmptyTextNode(n); }).
-        filter(function(n) { return ! elementHelpers.isSelectionMarkerNode(n); });
-
-      return realChangedNodes.length > 0;
-    }
-
-    var MutationObserver = window.MutationObserver || window.WebKitMutationObserver || window.MozMutationObserver;
-    
     // Flag to avoid running recursively
     var runningPostMutation = false;
 
@@ -50,7 +42,6 @@ define([
     });
 
     observer.observe(el, {
-      attributes: true,
       childList: true,
       subtree: true
     });

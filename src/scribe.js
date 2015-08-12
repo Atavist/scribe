@@ -1,39 +1,29 @@
 define([
-  'lodash-amd/modern/objects/defaults',
+  './plugins/core/plugins',
   './plugins/core/commands',
+  './plugins/core/formatters',
   './plugins/core/events',
-  './plugins/core/formatters/html/replace-nbsp-chars',
-  './plugins/core/formatters/html/enforce-p-elements',
-  './plugins/core/formatters/html/ensure-selectable-containers',
-  './plugins/core/formatters/plain-text/escape-html-characters',
-  './plugins/core/inline-elements-mode',
   './plugins/core/patches',
-  './plugins/core/set-root-p-element',
   './api',
   './transaction-manager',
   './undo-manager',
   './event-emitter',
-  './element',
   './node',
-  'immutable/dist/immutable'
+  'immutable',
+  './config'
 ], function (
-  defaults,
+  plugins,
   commands,
+  formatters,
   events,
-  replaceNbspCharsFormatter,
-  enforcePElements,
-  ensureSelectableContainers,
-  escapeHtmlCharactersFormatter,
-  inlineElementsMode,
   patches,
-  setRootPElement,
   Api,
   buildTransactionManager,
   UndoManager,
   EventEmitter,
-  elementHelpers,
   nodeHelpers,
-  Immutable
+  Immutable,
+  config
 ) {
 
   'use strict';
@@ -44,33 +34,13 @@ define([
     this.el = el;
     this.commands = {};
 
-    this.options = defaults(options || {}, {
-      allowBlockElements: true,
-      debug: false,
-      undo: {
-        manager: false,
-        enabled: true,
-        limit: 100,
-        interval: 250
-      },
-      defaultCommandPatches: [
-        'bold',
-        'indent',
-        'insertHTML',
-        'insertList',
-        'outdent',
-        'createLink'
-      ]
-    });
+    this.options = config.checkOptions(options);
 
     this.commandPatches = {};
     this._plainTextFormatterFactory = new FormatterFactory();
     this._htmlFormatterFactory = new HTMLFormatterFactory();
 
     this.api = new Api(this);
-
-    this.node = nodeHelpers;
-    this.element = elementHelpers;
 
     this.Immutable = Immutable;
 
@@ -109,27 +79,15 @@ define([
     /**
      * Core Plugins
      */
-
-    if (this.allowsBlockElements()) {
-      // Commands assume block elements are allowed, so all we have to do is
-      // set the content.
-      // TODO: replace this by initial formatter application?
-      this.use(setRootPElement());
-      // Warning: enforcePElements must come before ensureSelectableContainers
-      this.use(enforcePElements());
-      this.use(ensureSelectableContainers());
-    } else {
-      // Commands assume block elements are allowed, so we have to set the
-      // content and override some UX.
-      this.use(inlineElementsMode());
-    }
+    var corePlugins = Immutable.OrderedSet(this.options.defaultPlugins)
+      .sort(config.sortByPlugin('setRootPElement')) // Ensure `setRootPElement` is always loaded first
+      .filter(config.filterByBlockLevelMode(this.allowsBlockElements()))
+      .map(function (plugin) { return plugins[plugin]; });
 
     // Formatters
-    var defaultFormatters = Immutable.List.of(
-      escapeHtmlCharactersFormatter,
-      replaceNbspCharsFormatter
-    );
-
+    var defaultFormatters = Immutable.List(this.options.defaultFormatters)
+    .filter(function (formatter) { return !!formatters[formatter]; })
+    .map(function (formatter) { return formatters[formatter]; });
 
     // Patches
 
@@ -150,6 +108,7 @@ define([
     ).map(function(command) { return commands[command]; });
 
     var allPlugins = Immutable.List().concat(
+      corePlugins,
       defaultFormatters,
       defaultPatches,
       defaultCommandPatches,
@@ -163,6 +122,8 @@ define([
   }
 
   Scribe.prototype = Object.create(EventEmitter.prototype);
+  Scribe.prototype.node = nodeHelpers;
+  Scribe.prototype.element= Scribe.prototype.node;
 
   // For plugins
   // TODO: tap combinator?
@@ -206,8 +167,7 @@ define([
 
     if (scribe.options.undo.enabled) {
       // Get scribe previous content, and strip markers.
-      var lastContentNoMarkers = scribe._lastItem.content
-        .replace(/<em class="scribe-marker">/g, '').replace(/<\/em>/g, '');
+      var lastContentNoMarkers = scribe._lastItem.content.replace(/<em [^>]*class="scribe-marker"[^>]*>[^<]*?<\/em>/g, '');
 
       // We only want to push the history if the content actually changed.
       if (scribe.getHTML() !== lastContentNoMarkers) {

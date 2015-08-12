@@ -1,6 +1,8 @@
 Scribe [![Build Status](https://travis-ci.org/guardian/scribe.svg?branch=master)](https://travis-ci.org/guardian/scribe)
 ======
 
+[![Join the chat at https://gitter.im/guardian/scribe](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/guardian/scribe?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 A rich text editor framework for the web platform, with patches for
 browser inconsistencies and sensible defaults.
 
@@ -112,8 +114,8 @@ function myPlugin(scribe) {
 Theoretically, Scribe should work in any browser with the
 [Selection][Selection API] API, the [Range][Range API] API, and support for most
 of the non-standardised list of commands that appears in
-[this MDN article][Executing Commands]. It has been tested in Firefox >= 31,
-Chrome >= 35.
+[this MDN article][Executing Commands]. It has been tested in Firefox >= 36,
+Chrome >= 41.
 
 See the [status of our integration tests](https://travis-ci.org/guardian/scribe)
 for more up-to-date support information.
@@ -138,29 +140,15 @@ layers sequentially.
   <dt>Scribe</dt>
   <dd>Where custom behaviour is defined.</dd>
   <dt>Scribe Patches</dt>
-  <dd>Where patches for brower inconsistencies in native commands are defined.</dd>
+  <dd>Where patches for browser inconsistencies in native commands are defined.</dd>
   <dt>Native</dt>
 </dl>
 
 ## Plugins
 
-We have created a collection of plugins for advanced rich text editing purposes,
-all of which can be seen in use in our [example][example].
+Scribe has a rich plugin ecosystem that expands and customises what it can do.
 
-* [scribe-plugin-blockquote-command](https://github.com/guardian/scribe-plugin-blockquote-command)
-* [scribe-plugin-code-command](https://github.com/guardian/scribe-plugin-code-command)
-* [scribe-plugin-curly-quotes](https://github.com/guardian/scribe-plugin-curly-quotes)
-* [scribe-plugin-formatter-html-ensure-semantic-elements](https://github.com/guardian/scribe-plugin-formatter-html-ensure-semantic-elements)
-* [scribe-plugin-formatter-plain-text-convert-new-lines-to-html](https://github.com/guardian/scribe-plugin-formatter-plain-text-convert-new-lines-to-html)
-* [scribe-plugin-heading-command](https://github.com/guardian/scribe-plugin-heading-command)
-* [scribe-plugin-inline-styles-to-elements](https://github.com/guardian/scribe-plugin-inline-styles-to-elements)
-* [scribe-plugin-intelligent-unlink-command](https://github.com/guardian/scribe-plugin-intelligent-unlink-command)
-* [scribe-plugin-keyboard-shortcuts](https://github.com/guardian/scribe-plugin-keyboard-shortcuts)
-* [scribe-plugin-link-prompt-command](https://github.com/guardian/scribe-plugin-link-prompt-command)
-* [scribe-plugin-noting](https://github.com/guardian/scribe-plugin-noting)
-* [scribe-plugin-sanitizer](https://github.com/guardian/scribe-plugin-sanitizer)
-* [scribe-plugin-smart-lists](https://github.com/guardian/scribe-plugin-smart-lists)
-* [scribe-plugin-toolbar](https://github.com/guardian/scribe-plugin-toolbar)
+See the wiki for a [list of plugins and how to create new ones](https://github.com/guardian/scribe/wiki/Plugins)
 
 ## FAQ
 

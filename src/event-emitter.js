@@ -1,5 +1,4 @@
-define(['lodash-amd/modern/arrays/pull',
-  'immutable/dist/immutable'], function (pull, Immutable) {
+define(['immutable'], function (Immutable) {
 
   'use strict';
 
@@ -19,9 +18,9 @@ define(['lodash-amd/modern/arrays/pull',
   EventEmitter.prototype.off = function (eventName, fn) {
     var listeners = this._listeners[eventName] || Immutable.Set();
     if (fn) {
-      listeners = listeners.delete(fn);
+      this._listeners[eventName] = listeners.delete(fn);
     } else {
-      listeners = listeners.clear();
+      this._listeners[eventName] = listeners.clear();
     }
   };
 

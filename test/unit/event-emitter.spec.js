@@ -38,4 +38,38 @@ describe('event-emitter', function(){
     expect(secondHandle.calledBefore(thirdHandle)).to.be.true;
 
   });
+
+  it('should remove a specific listener when off is called', function(){
+    var handleOne = sinon.spy();
+    var handleTwo = sinon.spy();
+
+    emitter.on('event', handleOne);
+    emitter.on('event', handleTwo);
+
+    emitter.trigger('event');
+
+    emitter.off('event', handleOne);
+
+    emitter.trigger('event');
+
+    expect(handleOne.callCount).to.equal(1);
+    expect(handleTwo.callCount).to.equal(2);
+  });
+
+  it('should remove all listeners when off is called', function(){
+    var handleOne = sinon.spy();
+    var handleTwo = sinon.spy();
+
+    emitter.on('event', handleOne);
+    emitter.on('event', handleTwo);
+
+    emitter.trigger('event');
+
+    emitter.off('event');
+
+    emitter.trigger('event');
+
+    expect(handleOne.callCount).to.equal(1);
+    expect(handleTwo.callCount).to.equal(1);
+  });
 });
