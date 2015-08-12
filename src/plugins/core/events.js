@@ -55,7 +55,7 @@ define([
             if (isEditorActive) {
               selection.placeMarkers();
             }
-            // scribe.setHTML(scribe._htmlFormatterFactory.format(scribe.getHTML()));
+            scribe.setHTML(scribe._htmlFormatterFactory.format(scribe.getHTML()));
             selection.selectMarkers();
           }.bind(scribe);
 
